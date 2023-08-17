@@ -1,0 +1,1000 @@
++   airq1 = data.frame(a,d)
++   airq2 = na.omit(airq1)
++   return(aggregate(airq2$a,list(airq2$d), FUN=mean))  
++ }
+> #so2 State-wise
+> ggplot(mean_statewise(airq$so2, airq$state), aes(x=x, y =Group.1)) + geom_bar(stat = "identity") + labs(x="so2",y="States")
+> #no2 State-wise
+> ggplot(mean_statewise(airq$no2, airq$state), aes(x=x, y =Group.1)) + geom_bar(stat = "identity") + labs(x="no2",y="States")
+> #rspm State-wise
+> ggplot(mean_statewise(airq$rspm, airq$state), aes(x=x, y =Group.1)) + geom_bar(stat = "identity") + labs(x="rspm",y="States")
+> #spm State-wise
+> ggplot(mean_statewise(airq$spm, airq$state), aes(x=x, y =Group.1)) + geom_bar(stat = "identity") + labs(x="spm",y="States")
+> #pm2_5 State-wise
+> ggplot(mean_statewise(airq$pm2_5, airq$state), aes(x=x, y =Group.1)) + geom_bar(stat = "identity") + labs(x="pm2_5",y="States")
+> #Missing value percentage
+> percen = function(x){
++   return((x*100)/nrow(airq))
++ }
+> missing_per = lapply(missing, percen)
+> missing_per
+$stn_code
+[1] 33.06475
+
+$sampling_date
+[1] 0.0006884808
+
+$state
+[1] 0
+
+$location
+[1] 0.0006884808
+
+$agency
+[1] 34.30493
+
+$type
+[1] 1.237659
+
+$so2
+[1] 7.951035
+
+$no2
+[1] 3.72537
+
+$rspm
+[1] 9.230692
+
+$spm
+[1] 54.4788
+
+$location_monitoring_station
+[1] 6.309009
+
+$pm2_5
+[1] 97.8625
+
+$date
+[1] 0.001606455
+
+> #Plot the missing values attribute based
+> df1 = data.frame(s <- c('stn_code','stn_code','sampling_date','sampling_date','state',
++                              'state','location','location','agency','agency','type','type',
++                              'so2','so2','no2','no2','rspm','rspm','spm','spm',
++                              'location_monitoring_station','location_monitoring_station',
++                              'pm2_5','pm2_5','date','date'),
++                 c <- c('Present','Missing','Present','Missing','Present','Missing',
++                             'Present','Missing','Present','Missing','Present','Missing',
++                             'Present','Missing','Present','Missing','Present','Missing',
++                             'Present','Missing','Present','Missing','Present','Missing',
++                             'Present','Missing'),
++                 v <- c(66.93525,33.06475,99.9993115192,0.0006884808,100,0,
++                            99.99931152,0.00068848,65.69507,34.30493,98.762341,1.237659,
++                            92.048965,7.951035,96.27463,3.72537,90.769308,9.230692,45.5212,54.4788,
++                            93.690991,6.309009,2.1375,97.8625,99.998393545,0.001606455))
+> df1$s <- factor(df1$s)
+> df1$c <- factor(df1$c)
+> ggplot(data=df1, aes(x=" ", y=v, group=c, colour=c, fill=c)) +
++   geom_bar(width = 1, stat = "identity") +
++   coord_polar("y", start=0) + 
++   facet_grid(.~ s) +theme_void()
+> #Dealing with missing values
+> aq = airq[,-c(1,2,11)] #Removing stn_code, location_monitoring_station, sampling_date data as they are not required
+> aq = head(aq, - 3) #Removing last 3 rows as they do not contain any relevant information 
+> aq
+             state       location                                  agency
+1   Andhra Pradesh      Hyderabad                                    <NA>
+2   Andhra Pradesh      Hyderabad                                    <NA>
+3   Andhra Pradesh      Hyderabad                                    <NA>
+4   Andhra Pradesh      Hyderabad                                    <NA>
+5   Andhra Pradesh      Hyderabad                                    <NA>
+6   Andhra Pradesh      Hyderabad                                    <NA>
+7   Andhra Pradesh      Hyderabad                                    <NA>
+8   Andhra Pradesh      Hyderabad                                    <NA>
+9   Andhra Pradesh      Hyderabad                                    <NA>
+10  Andhra Pradesh      Hyderabad                                    <NA>
+11  Andhra Pradesh      Hyderabad                                    <NA>
+12  Andhra Pradesh      Hyderabad                                    <NA>
+13  Andhra Pradesh      Hyderabad                                    <NA>
+14  Andhra Pradesh      Hyderabad                                    <NA>
+15  Andhra Pradesh      Hyderabad                                    <NA>
+16  Andhra Pradesh      Hyderabad                                    <NA>
+17  Andhra Pradesh      Hyderabad                                    <NA>
+18  Andhra Pradesh      Hyderabad                                    <NA>
+19  Andhra Pradesh      Hyderabad                                    <NA>
+20  Andhra Pradesh      Hyderabad                                    <NA>
+21  Andhra Pradesh      Hyderabad                                    <NA>
+22  Andhra Pradesh      Hyderabad                                    <NA>
+23  Andhra Pradesh      Hyderabad                                    <NA>
+24  Andhra Pradesh      Hyderabad                                    <NA>
+25  Andhra Pradesh      Hyderabad                                    <NA>
+26  Andhra Pradesh      Hyderabad                                    <NA>
+27  Andhra Pradesh      Hyderabad                                    <NA>
+28  Andhra Pradesh      Hyderabad                                    <NA>
+29  Andhra Pradesh      Hyderabad                                    <NA>
+30  Andhra Pradesh      Hyderabad                                    <NA>
+31  Andhra Pradesh      Hyderabad                                    <NA>
+32  Andhra Pradesh      Hyderabad                                    <NA>
+33  Andhra Pradesh      Hyderabad                                    <NA>
+34  Andhra Pradesh      Hyderabad                                    <NA>
+35  Andhra Pradesh      Hyderabad                                    <NA>
+36  Andhra Pradesh      Hyderabad                                    <NA>
+37  Andhra Pradesh      Hyderabad                                    <NA>
+38  Andhra Pradesh      Hyderabad                                    <NA>
+39  Andhra Pradesh      Hyderabad                                    <NA>
+40  Andhra Pradesh      Hyderabad                                    <NA>
+41  Andhra Pradesh      Hyderabad                                    <NA>
+42  Andhra Pradesh      Hyderabad                                    <NA>
+43  Andhra Pradesh      Hyderabad                                    <NA>
+44  Andhra Pradesh      Hyderabad                                    <NA>
+45  Andhra Pradesh      Hyderabad                                    <NA>
+46  Andhra Pradesh      Hyderabad                                    <NA>
+47  Andhra Pradesh      Hyderabad                                    <NA>
+48  Andhra Pradesh      Hyderabad                                    <NA>
+49  Andhra Pradesh      Hyderabad                                    <NA>
+50  Andhra Pradesh      Hyderabad                                    <NA>
+51  Andhra Pradesh      Hyderabad                                    <NA>
+52  Andhra Pradesh      Hyderabad                                    <NA>
+53  Andhra Pradesh      Hyderabad                                    <NA>
+54  Andhra Pradesh      Hyderabad                                    <NA>
+55  Andhra Pradesh      Hyderabad                                    <NA>
+56  Andhra Pradesh      Hyderabad                                    <NA>
+57  Andhra Pradesh      Hyderabad                                    <NA>
+58  Andhra Pradesh      Hyderabad                                    <NA>
+59  Andhra Pradesh      Hyderabad                                    <NA>
+60  Andhra Pradesh      Hyderabad                                    <NA>
+61  Andhra Pradesh      Hyderabad                                    <NA>
+62  Andhra Pradesh      Hyderabad                                    <NA>
+63  Andhra Pradesh      Hyderabad                                    <NA>
+64  Andhra Pradesh      Hyderabad                                    <NA>
+65  Andhra Pradesh      Hyderabad                                    <NA>
+66  Andhra Pradesh      Hyderabad Andhra Pradesh  Pollution Control Board
+67  Andhra Pradesh      Hyderabad Andhra Pradesh  Pollution Control Board
+68  Andhra Pradesh      Hyderabad Andhra Pradesh  Pollution Control Board
+69  Andhra Pradesh Vishakhapatnam Andhra Pradesh  Pollution Control Board
+70  Andhra Pradesh Vishakhapatnam Andhra Pradesh  Pollution Control Board
+71  Andhra Pradesh Vishakhapatnam Andhra Pradesh  Pollution Control Board
+72  Andhra Pradesh Vishakhapatnam Andhra Pradesh  Pollution Control Board
+73  Andhra Pradesh      Hyderabad                                    <NA>
+74  Andhra Pradesh      Hyderabad                                    <NA>
+75  Andhra Pradesh      Hyderabad                                    <NA>
+76  Andhra Pradesh      Hyderabad Andhra Pradesh  Pollution Control Board
+77  Andhra Pradesh      Hyderabad Andhra Pradesh  Pollution Control Board
+78  Andhra Pradesh      Hyderabad Andhra Pradesh  Pollution Control Board
+79  Andhra Pradesh Vishakhapatnam Andhra Pradesh  Pollution Control Board
+80  Andhra Pradesh Vishakhapatnam Andhra Pradesh  Pollution Control Board
+81  Andhra Pradesh Vishakhapatnam Andhra Pradesh  Pollution Control Board
+82  Andhra Pradesh Vishakhapatnam Andhra Pradesh  Pollution Control Board
+83  Andhra Pradesh      Hyderabad                                    <NA>
+84  Andhra Pradesh      Hyderabad                                    <NA>
+85  Andhra Pradesh      Hyderabad                                    <NA>
+86  Andhra Pradesh      Hyderabad Andhra Pradesh  Pollution Control Board
+87  Andhra Pradesh      Hyderabad Andhra Pradesh  Pollution Control Board
+88  Andhra Pradesh      Hyderabad Andhra Pradesh  Pollution Control Board
+89  Andhra Pradesh Vishakhapatnam Andhra Pradesh  Pollution Control Board
+90  Andhra Pradesh Vishakhapatnam Andhra Pradesh  Pollution Control Board
+91  Andhra Pradesh Vishakhapatnam Andhra Pradesh  Pollution Control Board
+92  Andhra Pradesh Vishakhapatnam Andhra Pradesh  Pollution Control Board
+93  Andhra Pradesh      Hyderabad                                    <NA>
+94  Andhra Pradesh      Hyderabad                                    <NA>
+95  Andhra Pradesh      Hyderabad                                    <NA>
+96  Andhra Pradesh      Hyderabad Andhra Pradesh  Pollution Control Board
+97  Andhra Pradesh      Hyderabad Andhra Pradesh  Pollution Control Board
+98  Andhra Pradesh Vishakhapatnam Andhra Pradesh  Pollution Control Board
+99  Andhra Pradesh Vishakhapatnam Andhra Pradesh  Pollution Control Board
+100 Andhra Pradesh Vishakhapatnam Andhra Pradesh  Pollution Control Board
+                                  type   so2   no2 rspm spm pm2_5       date
+1   Residential, Rural and other Areas   4.8  17.4   NA  NA    NA 1990-02-01
+2                      Industrial Area   3.1   7.0   NA  NA    NA 1990-02-01
+3   Residential, Rural and other Areas   6.2  28.5   NA  NA    NA 1990-02-01
+4   Residential, Rural and other Areas   6.3  14.7   NA  NA    NA 1990-03-01
+5                      Industrial Area   4.7   7.5   NA  NA    NA 1990-03-01
+6   Residential, Rural and other Areas   6.4  25.7   NA  NA    NA 1990-03-01
+7   Residential, Rural and other Areas   5.4  17.1   NA  NA    NA 1990-04-01
+8                      Industrial Area   4.7   8.7   NA  NA    NA 1990-04-01
+9   Residential, Rural and other Areas   4.2  23.0   NA  NA    NA 1990-04-01
+10                     Industrial Area   4.0   8.9   NA  NA    NA 1990-05-01
+11  Residential, Rural and other Areas   3.6  18.6   NA  NA    NA 1990-05-01
+12  Residential, Rural and other Areas   3.9  14.1   NA 133    NA 1990-06-01
+13                     Industrial Area   5.6  11.8   NA  82    NA 1990-06-01
+14  Residential, Rural and other Areas   3.3  19.3   NA 111    NA 1990-06-01
+15  Residential, Rural and other Areas   3.9   8.2   NA 118    NA 1990-07-01
+16  Residential, Rural and other Areas   3.5  12.1   NA 135    NA 1990-07-01
+17                     Industrial Area   7.9  10.2   NA  80    NA 1990-07-01
+18  Residential, Rural and other Areas   4.0   9.9   NA 179    NA 1990-08-01
+19                     Industrial Area  12.4  11.5   NA  58    NA 1990-08-01
+20  Residential, Rural and other Areas   4.0  12.3   NA  99    NA 1990-08-01
+21  Residential, Rural and other Areas   6.3  11.5   NA 270    NA 1990-09-01
+22                     Industrial Area  44.8  13.7   NA  97    NA 1990-09-01
+23  Residential, Rural and other Areas   8.1  17.8   NA 167    NA 1990-09-01
+24  Residential, Rural and other Areas   7.7  11.3   NA 145    NA 1990-10-01
+25                     Industrial Area  20.6  13.6   NA  75    NA 1990-10-01
+26  Residential, Rural and other Areas  20.4  27.5   NA 212    NA 1990-10-01
+27  Residential, Rural and other Areas  13.9   7.2   NA  93    NA 1990-11-01
+28                     Industrial Area  11.2  18.6   NA  61    NA 1990-11-01
+29  Residential, Rural and other Areas  22.3  35.9   NA 255    NA 1990-11-01
+30  Residential, Rural and other Areas  24.5  28.0   NA 197    NA 1991-01-01
+31  Residential, Rural and other Areas   7.2  10.4   NA 148    NA 1991-01-01
+32                     Industrial Area  28.7  16.2   NA  77    NA 1991-01-01
+33  Residential, Rural and other Areas  18.7  42.2   NA 125    NA 1991-02-01
+34  Residential, Rural and other Areas  24.5  18.0   NA 330    NA 1991-02-01
+35                     Industrial Area  20.4  12.6   NA  93    NA 1991-02-01
+36  Residential, Rural and other Areas   5.2  41.3   NA 287    NA 1991-03-01
+37  Residential, Rural and other Areas   7.5  12.2   NA 241    NA 1991-03-01
+38                     Industrial Area   4.8   8.4   NA  85    NA 1991-03-01
+39  Residential, Rural and other Areas   8.5  48.5   NA  NA    NA 1991-04-01
+40  Residential, Rural and other Areas   9.7  12.4   NA 283    NA 1991-04-01
+41                     Industrial Area  21.2  11.5   NA 108    NA 1991-04-01
+42  Residential, Rural and other Areas   4.9  15.3   NA 234    NA 1991-05-01
+43                     Industrial Area  17.7  14.0   NA 121    NA 1991-05-01
+44  Residential, Rural and other Areas  12.3  38.6   NA 219    NA 1991-05-01
+45  Residential, Rural and other Areas   3.5  11.9   NA 179    NA 1991-06-01
+46                     Industrial Area   3.1   7.5   NA  84    NA 1991-06-01
+47  Residential, Rural and other Areas   3.0  19.0   NA 154    NA 1991-06-01
+48  Residential, Rural and other Areas   6.2  10.0   NA 150    NA 1991-07-01
+49                     Industrial Area   7.9   9.2   NA  67    NA 1991-07-01
+50  Residential, Rural and other Areas   6.5  17.3   NA 128    NA 1991-07-01
+51  Residential, Rural and other Areas   8.5  12.5   NA 119    NA 1991-08-01
+52                     Industrial Area   7.8   9.8   NA  71    NA 1991-08-01
+53  Residential, Rural and other Areas   6.5  12.6   NA  98    NA 1991-08-01
+54  Residential, Rural and other Areas   6.6  12.7   NA 172    NA 1991-09-01
+55                     Industrial Area  13.3  11.9   NA  56    NA 1991-09-01
+56  Residential, Rural and other Areas   6.0  23.4   NA 120    NA 1991-09-01
+57  Residential, Rural and other Areas   8.5  15.5   NA 135    NA 1991-10-01
+58                     Industrial Area  12.3  12.2   NA  83    NA 1991-10-01
+59  Residential, Rural and other Areas   6.2  25.7   NA 158    NA 1991-10-01
+60  Residential, Rural and other Areas   8.0   8.3   NA 163    NA 1991-11-01
+61                     Industrial Area  14.6  12.9   NA 103    NA 1991-11-01
+62  Residential, Rural and other Areas  18.8  39.0   NA 232    NA 1991-11-01
+63  Residential, Rural and other Areas   8.9  11.4   NA 149    NA 1991-12-01
+64                     Industrial Area  11.2  18.4   NA 129    NA 1991-12-01
+65  Residential, Rural and other Areas   6.0  47.0   NA 242    NA 1991-12-01
+66                                <NA>  20.0  64.6   NA 353    NA 1992-01-01
+67                                <NA>  14.6   4.4   NA 190    NA 1992-01-01
+68                                <NA>  35.8  12.5   NA 261    NA 1992-01-01
+69                                <NA>  52.6  89.6   NA 679    NA 1992-01-01
+70                                <NA>  55.8  33.8   NA 245    NA 1992-01-01
+71                                <NA>  33.4  31.7   NA 320    NA 1992-01-01
+72                                <NA>  43.6  30.8   NA 334    NA 1992-01-01
+73  Residential, Rural and other Areas   6.0  34.1   NA 271    NA 1992-01-01
+74  Residential, Rural and other Areas  12.9  14.7   NA 180    NA 1992-01-01
+75                     Industrial Area  24.5  11.5   NA 118    NA 1992-01-01
+76                                <NA>  13.0  66.5   NA 241    NA 1992-02-01
+77                                <NA>   8.4  21.4   NA 129    NA 1992-02-01
+78                                <NA>  12.8  30.9   NA 171    NA 1992-02-01
+79                                <NA>  32.9 144.8   NA 555    NA 1992-02-01
+80                                <NA>  24.3  18.7   NA 201    NA 1992-02-01
+81                                <NA>  36.1  18.1   NA 250    NA 1992-02-01
+82                                <NA>  34.5  21.0   NA 227    NA 1992-02-01
+83  Residential, Rural and other Areas   8.8   9.7   NA 171    NA 1992-02-01
+84                     Industrial Area  14.4  10.4   NA 122    NA 1992-02-01
+85  Residential, Rural and other Areas  14.1  37.8   NA 248    NA 1992-02-01
+86                                <NA>  24.9  61.0   NA 276    NA 1992-03-01
+87                                <NA>  12.0  23.0   NA 134    NA 1992-03-01
+88                                <NA>  12.6  29.2   NA 135    NA 1992-03-01
+89                                <NA> 136.1 162.2   NA 433    NA 1992-03-01
+90                                <NA>  67.4 127.7   NA 215    NA 1992-03-01
+91                                <NA>  32.7  28.0   NA 253    NA 1992-03-01
+92                                <NA>  90.0  26.2   NA 262    NA 1992-03-01
+93                     Industrial Area  22.4  10.2   NA 159    NA 1992-03-01
+94  Residential, Rural and other Areas  14.1  20.8   NA 179    NA 1992-03-01
+95  Residential, Rural and other Areas  12.4  38.0   NA 267    NA 1992-03-01
+96                                <NA>   7.8  32.3   NA 229    NA 1992-04-01
+97                                <NA>  11.6  39.6   NA 147    NA 1992-04-01
+98                                <NA>  44.6 122.4   NA 418    NA 1992-04-01
+99                                <NA>  94.3  47.3   NA 208    NA 1992-04-01
+100                               <NA>  17.2  21.7   NA 216    NA 1992-04-01
+ [ reached 'max' / getOption("max.print") -- omitted 435639 rows ]
+> tail(aq,10)
+             state location                                    agency  type so2 no2 rspm spm pm2_5
+435730 West Bengal ULUBERIA West Bengal State Pollution Control Board RIRUO  19  49  140  NA    NA
+435731 West Bengal ULUBERIA West Bengal State Pollution Control Board RIRUO  18  41  142  NA    NA
+435732 West Bengal ULUBERIA West Bengal State Pollution Control Board RIRUO  22  58  155  NA    NA
+435733 West Bengal ULUBERIA West Bengal State Pollution Control Board RIRUO  22  50  145  NA    NA
+435734 West Bengal ULUBERIA West Bengal State Pollution Control Board RIRUO  34  61  161  NA    NA
+435735 West Bengal ULUBERIA West Bengal State Pollution Control Board RIRUO  20  44  148  NA    NA
+435736 West Bengal ULUBERIA West Bengal State Pollution Control Board RIRUO  17  44  131  NA    NA
+435737 West Bengal ULUBERIA West Bengal State Pollution Control Board RIRUO  18  45  140  NA    NA
+435738 West Bengal ULUBERIA West Bengal State Pollution Control Board RIRUO  22  50  143  NA    NA
+435739 West Bengal ULUBERIA West Bengal State Pollution Control Board RIRUO  20  46  171  NA    NA
+             date
+435730 2015-11-29
+435731 2015-12-03
+435732 2015-12-06
+435733 2015-12-09
+435734 2015-12-12
+435735 2015-12-15
+435736 2015-12-18
+435737 2015-12-21
+435738 2015-12-24
+435739 2015-12-29
+> #Categorical Data
+> #Replacing NA values in agency to "unknown"
+> aq <- aq %>%
++   replace_na(list(agency = 'unknown'))
+Error in replace_na(., list(agency = "unknown")) : 
+  could not find function "replace_na"
+> aq
+             state       location                                  agency
+1   Andhra Pradesh      Hyderabad                                    <NA>
+2   Andhra Pradesh      Hyderabad                                    <NA>
+3   Andhra Pradesh      Hyderabad                                    <NA>
+4   Andhra Pradesh      Hyderabad                                    <NA>
+5   Andhra Pradesh      Hyderabad                                    <NA>
+6   Andhra Pradesh      Hyderabad                                    <NA>
+7   Andhra Pradesh      Hyderabad                                    <NA>
+8   Andhra Pradesh      Hyderabad                                    <NA>
+9   Andhra Pradesh      Hyderabad                                    <NA>
+10  Andhra Pradesh      Hyderabad                                    <NA>
+11  Andhra Pradesh      Hyderabad                                    <NA>
+12  Andhra Pradesh      Hyderabad                                    <NA>
+13  Andhra Pradesh      Hyderabad                                    <NA>
+14  Andhra Pradesh      Hyderabad                                    <NA>
+15  Andhra Pradesh      Hyderabad                                    <NA>
+16  Andhra Pradesh      Hyderabad                                    <NA>
+17  Andhra Pradesh      Hyderabad                                    <NA>
+18  Andhra Pradesh      Hyderabad                                    <NA>
+19  Andhra Pradesh      Hyderabad                                    <NA>
+20  Andhra Pradesh      Hyderabad                                    <NA>
+21  Andhra Pradesh      Hyderabad                                    <NA>
+22  Andhra Pradesh      Hyderabad                                    <NA>
+23  Andhra Pradesh      Hyderabad                                    <NA>
+24  Andhra Pradesh      Hyderabad                                    <NA>
+25  Andhra Pradesh      Hyderabad                                    <NA>
+26  Andhra Pradesh      Hyderabad                                    <NA>
+27  Andhra Pradesh      Hyderabad                                    <NA>
+28  Andhra Pradesh      Hyderabad                                    <NA>
+29  Andhra Pradesh      Hyderabad                                    <NA>
+30  Andhra Pradesh      Hyderabad                                    <NA>
+31  Andhra Pradesh      Hyderabad                                    <NA>
+32  Andhra Pradesh      Hyderabad                                    <NA>
+33  Andhra Pradesh      Hyderabad                                    <NA>
+34  Andhra Pradesh      Hyderabad                                    <NA>
+35  Andhra Pradesh      Hyderabad                                    <NA>
+36  Andhra Pradesh      Hyderabad                                    <NA>
+37  Andhra Pradesh      Hyderabad                                    <NA>
+38  Andhra Pradesh      Hyderabad                                    <NA>
+39  Andhra Pradesh      Hyderabad                                    <NA>
+40  Andhra Pradesh      Hyderabad                                    <NA>
+41  Andhra Pradesh      Hyderabad                                    <NA>
+42  Andhra Pradesh      Hyderabad                                    <NA>
+43  Andhra Pradesh      Hyderabad                                    <NA>
+44  Andhra Pradesh      Hyderabad                                    <NA>
+45  Andhra Pradesh      Hyderabad                                    <NA>
+46  Andhra Pradesh      Hyderabad                                    <NA>
+47  Andhra Pradesh      Hyderabad                                    <NA>
+48  Andhra Pradesh      Hyderabad                                    <NA>
+49  Andhra Pradesh      Hyderabad                                    <NA>
+50  Andhra Pradesh      Hyderabad                                    <NA>
+51  Andhra Pradesh      Hyderabad                                    <NA>
+52  Andhra Pradesh      Hyderabad                                    <NA>
+53  Andhra Pradesh      Hyderabad                                    <NA>
+54  Andhra Pradesh      Hyderabad                                    <NA>
+55  Andhra Pradesh      Hyderabad                                    <NA>
+56  Andhra Pradesh      Hyderabad                                    <NA>
+57  Andhra Pradesh      Hyderabad                                    <NA>
+58  Andhra Pradesh      Hyderabad                                    <NA>
+59  Andhra Pradesh      Hyderabad                                    <NA>
+60  Andhra Pradesh      Hyderabad                                    <NA>
+61  Andhra Pradesh      Hyderabad                                    <NA>
+62  Andhra Pradesh      Hyderabad                                    <NA>
+63  Andhra Pradesh      Hyderabad                                    <NA>
+64  Andhra Pradesh      Hyderabad                                    <NA>
+65  Andhra Pradesh      Hyderabad                                    <NA>
+66  Andhra Pradesh      Hyderabad Andhra Pradesh  Pollution Control Board
+67  Andhra Pradesh      Hyderabad Andhra Pradesh  Pollution Control Board
+68  Andhra Pradesh      Hyderabad Andhra Pradesh  Pollution Control Board
+69  Andhra Pradesh Vishakhapatnam Andhra Pradesh  Pollution Control Board
+70  Andhra Pradesh Vishakhapatnam Andhra Pradesh  Pollution Control Board
+71  Andhra Pradesh Vishakhapatnam Andhra Pradesh  Pollution Control Board
+72  Andhra Pradesh Vishakhapatnam Andhra Pradesh  Pollution Control Board
+73  Andhra Pradesh      Hyderabad                                    <NA>
+74  Andhra Pradesh      Hyderabad                                    <NA>
+75  Andhra Pradesh      Hyderabad                                    <NA>
+76  Andhra Pradesh      Hyderabad Andhra Pradesh  Pollution Control Board
+77  Andhra Pradesh      Hyderabad Andhra Pradesh  Pollution Control Board
+78  Andhra Pradesh      Hyderabad Andhra Pradesh  Pollution Control Board
+79  Andhra Pradesh Vishakhapatnam Andhra Pradesh  Pollution Control Board
+80  Andhra Pradesh Vishakhapatnam Andhra Pradesh  Pollution Control Board
+81  Andhra Pradesh Vishakhapatnam Andhra Pradesh  Pollution Control Board
+82  Andhra Pradesh Vishakhapatnam Andhra Pradesh  Pollution Control Board
+83  Andhra Pradesh      Hyderabad                                    <NA>
+84  Andhra Pradesh      Hyderabad                                    <NA>
+85  Andhra Pradesh      Hyderabad                                    <NA>
+86  Andhra Pradesh      Hyderabad Andhra Pradesh  Pollution Control Board
+87  Andhra Pradesh      Hyderabad Andhra Pradesh  Pollution Control Board
+88  Andhra Pradesh      Hyderabad Andhra Pradesh  Pollution Control Board
+89  Andhra Pradesh Vishakhapatnam Andhra Pradesh  Pollution Control Board
+90  Andhra Pradesh Vishakhapatnam Andhra Pradesh  Pollution Control Board
+91  Andhra Pradesh Vishakhapatnam Andhra Pradesh  Pollution Control Board
+92  Andhra Pradesh Vishakhapatnam Andhra Pradesh  Pollution Control Board
+93  Andhra Pradesh      Hyderabad                                    <NA>
+94  Andhra Pradesh      Hyderabad                                    <NA>
+95  Andhra Pradesh      Hyderabad                                    <NA>
+96  Andhra Pradesh      Hyderabad Andhra Pradesh  Pollution Control Board
+97  Andhra Pradesh      Hyderabad Andhra Pradesh  Pollution Control Board
+98  Andhra Pradesh Vishakhapatnam Andhra Pradesh  Pollution Control Board
+99  Andhra Pradesh Vishakhapatnam Andhra Pradesh  Pollution Control Board
+100 Andhra Pradesh Vishakhapatnam Andhra Pradesh  Pollution Control Board
+                                  type   so2   no2 rspm spm pm2_5       date
+1   Residential, Rural and other Areas   4.8  17.4   NA  NA    NA 1990-02-01
+2                      Industrial Area   3.1   7.0   NA  NA    NA 1990-02-01
+3   Residential, Rural and other Areas   6.2  28.5   NA  NA    NA 1990-02-01
+4   Residential, Rural and other Areas   6.3  14.7   NA  NA    NA 1990-03-01
+5                      Industrial Area   4.7   7.5   NA  NA    NA 1990-03-01
+6   Residential, Rural and other Areas   6.4  25.7   NA  NA    NA 1990-03-01
+7   Residential, Rural and other Areas   5.4  17.1   NA  NA    NA 1990-04-01
+8                      Industrial Area   4.7   8.7   NA  NA    NA 1990-04-01
+9   Residential, Rural and other Areas   4.2  23.0   NA  NA    NA 1990-04-01
+10                     Industrial Area   4.0   8.9   NA  NA    NA 1990-05-01
+11  Residential, Rural and other Areas   3.6  18.6   NA  NA    NA 1990-05-01
+12  Residential, Rural and other Areas   3.9  14.1   NA 133    NA 1990-06-01
+13                     Industrial Area   5.6  11.8   NA  82    NA 1990-06-01
+14  Residential, Rural and other Areas   3.3  19.3   NA 111    NA 1990-06-01
+15  Residential, Rural and other Areas   3.9   8.2   NA 118    NA 1990-07-01
+16  Residential, Rural and other Areas   3.5  12.1   NA 135    NA 1990-07-01
+17                     Industrial Area   7.9  10.2   NA  80    NA 1990-07-01
+18  Residential, Rural and other Areas   4.0   9.9   NA 179    NA 1990-08-01
+19                     Industrial Area  12.4  11.5   NA  58    NA 1990-08-01
+20  Residential, Rural and other Areas   4.0  12.3   NA  99    NA 1990-08-01
+21  Residential, Rural and other Areas   6.3  11.5   NA 270    NA 1990-09-01
+22                     Industrial Area  44.8  13.7   NA  97    NA 1990-09-01
+23  Residential, Rural and other Areas   8.1  17.8   NA 167    NA 1990-09-01
+24  Residential, Rural and other Areas   7.7  11.3   NA 145    NA 1990-10-01
+25                     Industrial Area  20.6  13.6   NA  75    NA 1990-10-01
+26  Residential, Rural and other Areas  20.4  27.5   NA 212    NA 1990-10-01
+27  Residential, Rural and other Areas  13.9   7.2   NA  93    NA 1990-11-01
+28                     Industrial Area  11.2  18.6   NA  61    NA 1990-11-01
+29  Residential, Rural and other Areas  22.3  35.9   NA 255    NA 1990-11-01
+30  Residential, Rural and other Areas  24.5  28.0   NA 197    NA 1991-01-01
+31  Residential, Rural and other Areas   7.2  10.4   NA 148    NA 1991-01-01
+32                     Industrial Area  28.7  16.2   NA  77    NA 1991-01-01
+33  Residential, Rural and other Areas  18.7  42.2   NA 125    NA 1991-02-01
+34  Residential, Rural and other Areas  24.5  18.0   NA 330    NA 1991-02-01
+35                     Industrial Area  20.4  12.6   NA  93    NA 1991-02-01
+36  Residential, Rural and other Areas   5.2  41.3   NA 287    NA 1991-03-01
+37  Residential, Rural and other Areas   7.5  12.2   NA 241    NA 1991-03-01
+38                     Industrial Area   4.8   8.4   NA  85    NA 1991-03-01
+39  Residential, Rural and other Areas   8.5  48.5   NA  NA    NA 1991-04-01
+40  Residential, Rural and other Areas   9.7  12.4   NA 283    NA 1991-04-01
+41                     Industrial Area  21.2  11.5   NA 108    NA 1991-04-01
+42  Residential, Rural and other Areas   4.9  15.3   NA 234    NA 1991-05-01
+43                     Industrial Area  17.7  14.0   NA 121    NA 1991-05-01
+44  Residential, Rural and other Areas  12.3  38.6   NA 219    NA 1991-05-01
+45  Residential, Rural and other Areas   3.5  11.9   NA 179    NA 1991-06-01
+46                     Industrial Area   3.1   7.5   NA  84    NA 1991-06-01
+47  Residential, Rural and other Areas   3.0  19.0   NA 154    NA 1991-06-01
+48  Residential, Rural and other Areas   6.2  10.0   NA 150    NA 1991-07-01
+49                     Industrial Area   7.9   9.2   NA  67    NA 1991-07-01
+50  Residential, Rural and other Areas   6.5  17.3   NA 128    NA 1991-07-01
+51  Residential, Rural and other Areas   8.5  12.5   NA 119    NA 1991-08-01
+52                     Industrial Area   7.8   9.8   NA  71    NA 1991-08-01
+53  Residential, Rural and other Areas   6.5  12.6   NA  98    NA 1991-08-01
+54  Residential, Rural and other Areas   6.6  12.7   NA 172    NA 1991-09-01
+55                     Industrial Area  13.3  11.9   NA  56    NA 1991-09-01
+56  Residential, Rural and other Areas   6.0  23.4   NA 120    NA 1991-09-01
+57  Residential, Rural and other Areas   8.5  15.5   NA 135    NA 1991-10-01
+58                     Industrial Area  12.3  12.2   NA  83    NA 1991-10-01
+59  Residential, Rural and other Areas   6.2  25.7   NA 158    NA 1991-10-01
+60  Residential, Rural and other Areas   8.0   8.3   NA 163    NA 1991-11-01
+61                     Industrial Area  14.6  12.9   NA 103    NA 1991-11-01
+62  Residential, Rural and other Areas  18.8  39.0   NA 232    NA 1991-11-01
+63  Residential, Rural and other Areas   8.9  11.4   NA 149    NA 1991-12-01
+64                     Industrial Area  11.2  18.4   NA 129    NA 1991-12-01
+65  Residential, Rural and other Areas   6.0  47.0   NA 242    NA 1991-12-01
+66                                <NA>  20.0  64.6   NA 353    NA 1992-01-01
+67                                <NA>  14.6   4.4   NA 190    NA 1992-01-01
+68                                <NA>  35.8  12.5   NA 261    NA 1992-01-01
+69                                <NA>  52.6  89.6   NA 679    NA 1992-01-01
+70                                <NA>  55.8  33.8   NA 245    NA 1992-01-01
+71                                <NA>  33.4  31.7   NA 320    NA 1992-01-01
+72                                <NA>  43.6  30.8   NA 334    NA 1992-01-01
+73  Residential, Rural and other Areas   6.0  34.1   NA 271    NA 1992-01-01
+74  Residential, Rural and other Areas  12.9  14.7   NA 180    NA 1992-01-01
+75                     Industrial Area  24.5  11.5   NA 118    NA 1992-01-01
+76                                <NA>  13.0  66.5   NA 241    NA 1992-02-01
+77                                <NA>   8.4  21.4   NA 129    NA 1992-02-01
+78                                <NA>  12.8  30.9   NA 171    NA 1992-02-01
+79                                <NA>  32.9 144.8   NA 555    NA 1992-02-01
+80                                <NA>  24.3  18.7   NA 201    NA 1992-02-01
+81                                <NA>  36.1  18.1   NA 250    NA 1992-02-01
+82                                <NA>  34.5  21.0   NA 227    NA 1992-02-01
+83  Residential, Rural and other Areas   8.8   9.7   NA 171    NA 1992-02-01
+84                     Industrial Area  14.4  10.4   NA 122    NA 1992-02-01
+85  Residential, Rural and other Areas  14.1  37.8   NA 248    NA 1992-02-01
+86                                <NA>  24.9  61.0   NA 276    NA 1992-03-01
+87                                <NA>  12.0  23.0   NA 134    NA 1992-03-01
+88                                <NA>  12.6  29.2   NA 135    NA 1992-03-01
+89                                <NA> 136.1 162.2   NA 433    NA 1992-03-01
+90                                <NA>  67.4 127.7   NA 215    NA 1992-03-01
+91                                <NA>  32.7  28.0   NA 253    NA 1992-03-01
+92                                <NA>  90.0  26.2   NA 262    NA 1992-03-01
+93                     Industrial Area  22.4  10.2   NA 159    NA 1992-03-01
+94  Residential, Rural and other Areas  14.1  20.8   NA 179    NA 1992-03-01
+95  Residential, Rural and other Areas  12.4  38.0   NA 267    NA 1992-03-01
+96                                <NA>   7.8  32.3   NA 229    NA 1992-04-01
+97                                <NA>  11.6  39.6   NA 147    NA 1992-04-01
+98                                <NA>  44.6 122.4   NA 418    NA 1992-04-01
+99                                <NA>  94.3  47.3   NA 208    NA 1992-04-01
+100                               <NA>  17.2  21.7   NA 216    NA 1992-04-01
+ [ reached 'max' / getOption("max.print") -- omitted 435639 rows ]
+> #Replacing NA values in Date with last observed date
+> library(zoo)
+
+Attaching package: ‘zoo’
+
+The following objects are masked from ‘package:base’:
+
+    as.Date, as.Date.numeric
+
+Warning message:
+package ‘zoo’ was built under R version 4.1.3 
+> aq$date = na.locf(na.locf(aq$date),fromLast=TRUE)
+> #Replacing NA values in type with last observed type
+> aq$type = na.locf(na.locf(aq$type),fromLast=TRUE)
+> #Numerical Data
+> #Replacing so2 with mean of the respective state
+> so2_mean_statewise = mean_statewise(aq$so2, aq$state)
+> colnames(so2_mean_statewise) <- c('state','so2')
+> so2_mean_statewise
+                  state       so2
+1        Andhra Pradesh  7.284845
+2     Arunachal Pradesh  3.179104
+3                 Assam  6.723263
+4                 Bihar 19.381476
+5            Chandigarh  2.676986
+6          Chhattisgarh 12.846609
+7  Dadra & Nagar Haveli  8.939587
+8           Daman & Diu  8.192958
+9                 Delhi  8.737273
+10                  Goa  6.827913
+11              Gujarat 16.656343
+12              Haryana 14.064957
+13     Himachal Pradesh  2.667013
+14      Jammu & Kashmir  7.180521
+15            Jharkhand 23.485794
+16            Karnataka 10.223099
+17               Kerala  5.322350
+18       Madhya Pradesh 11.587410
+19          Maharashtra 17.366863
+20              Manipur  3.900000
+21            Meghalaya  8.955908
+22              Mizoram  2.085009
+23             Nagaland  2.059736
+24               Odisha  5.275874
+25           Puducherry 11.970639
+26               Punjab 10.628598
+27            Rajasthan  7.665725
+28               Sikkim 19.800000
+29           Tamil Nadu 11.315134
+30            Telangana  5.418609
+31        Uttar Pradesh 12.528500
+32          Uttarakhand 24.372957
+33          Uttaranchal 24.697736
+34          West Bengal 12.608766
+> aq = left_join(aq, so2_mean_statewise, by = "state")
+> aq$so2 = coalesce(aq$so2.x, aq$so2.y)
+> aq = select(aq, -so2.x, -so2.y)
+> #Replacing no2 with mean of the respective state
+> no2_mean_statewise = mean_statewise(aq$no2, aq$state)
+> colnames(no2_mean_statewise) <- c('state','no2')
+> no2_mean_statewise
+                  state       no2
+1        Andhra Pradesh 21.704451
+2     Arunachal Pradesh  5.469697
+3                 Assam 14.793691
+4                 Bihar 36.575525
+5            Chandigarh 18.619404
+6          Chhattisgarh 24.815961
+7  Dadra & Nagar Haveli 18.293959
+8           Daman & Diu 16.168926
+9                 Delhi 53.489147
+10                  Goa 12.506337
+11              Gujarat 24.065631
+12              Haryana 23.428311
+13     Himachal Pradesh 13.658688
+14      Jammu & Kashmir 12.213181
+15            Jharkhand 43.366341
+16            Karnataka 22.702837
+17               Kerala 14.421889
+18       Madhya Pradesh 18.639596
+19          Maharashtra 32.115370
+20              Manipur 20.173684
+21            Meghalaya 10.659706
+22              Mizoram  6.682171
+23             Nagaland  8.947265
+24               Odisha 16.899568
+25           Puducherry 15.279496
+26               Punjab 28.085846
+27            Rajasthan 30.441008
+28               Sikkim 26.800000
+29           Tamil Nadu 21.601202
+30            Telangana 23.864005
+31        Uttar Pradesh 27.610095
+32          Uttarakhand 26.938090
+33          Uttaranchal 27.163019
+34          West Bengal 59.075731
+> aq = left_join(aq, no2_mean_statewise, by = "state")
+> aq$no2 = coalesce(aq$no2.x, aq$no2.y)
+> aq = select(aq,-no2.x,-no2.y)
+> #Replacing rspm with mean of the respective state
+> rspm_mean_statewise = mean_statewise(aq$rspm, aq$state)
+> colnames(rspm_mean_statewise) <- c('state','rspm')
+> rspm_mean_statewise
+                  state      rspm
+1        Andhra Pradesh  78.18282
+2     Arunachal Pradesh  76.62921
+3                 Assam  93.72491
+4                 Bihar 123.70518
+5            Chandigarh  96.58708
+6          Chhattisgarh 126.47240
+7  Dadra & Nagar Haveli  76.53653
+8           Daman & Diu  73.74943
+9                 Delhi 196.63977
+10                  Goa  61.21277
+11              Gujarat  98.24451
+12              Haryana 149.86054
+13     Himachal Pradesh  91.87020
+14      Jammu & Kashmir 117.44948
+15            Jharkhand 168.51776
+16            Karnataka  79.37180
+17               Kerala  50.63606
+18       Madhya Pradesh 114.71797
+19          Maharashtra 101.47961
+20              Manipur  69.81579
+21            Meghalaya  68.98844
+22              Mizoram  42.71647
+23             Nagaland  83.35703
+24               Odisha  83.61982
+25           Puducherry  43.41822
+26               Punjab 173.49371
+27            Rajasthan 142.01683
+28               Sikkim  32.00000
+29           Tamil Nadu  66.58564
+30            Telangana  85.04301
+31        Uttar Pradesh 176.95231
+32          Uttarakhand 148.97891
+33          Uttaranchal 121.69434
+34          West Bengal 115.03991
+> aq = left_join(aq, rspm_mean_statewise, by = "state")
+> aq$rspm = coalesce(aq$rspm.x, aq$rspm.y)
+> aq = select(aq,-rspm.x,-rspm.y)
+> #Replacing NA values in spm with 0
+> aq$spm[is.na(aq$spm)] = 0
+> #Replacing NA values in pm2_5 with 0
+> aq$pm2_5[is.na(aq$pm2_5)] = 0
+> #Checking the count of NA values
+> missing = aq %>% summarise_all(~ sum(is.na(.)))
+> missing
+  state location agency type spm pm2_5 date so2 no2 rspm
+1     0        0 149478    0   0     0    0   0   0    0
+> #All the missing values have been dealt with.
+> aq1 = aq
+> #Calculating Day of the year for inputting into models
+> class(aq1$date)
+[1] "character"
+> d = as.Date(aq1$date, format = "%Y-%m-%d")
+> aq1$Day_of_yr = format(d,format="%j")
+> #Adding month of the year as an attribute
+> aq1$Month = format(d,format="%m")
+> #Caluclating SOi
+> SOi_calc = function(so2){
++   si=0
++   if (so2<=40){
++     si= so2*(50/40)
++   }
++   else if(so2>40 && so2<=80){
++       si= 50+(so2-40)*(50/40)
++   }
++   else if(so2>80 && so2<=380){
++       si= 100+(so2-80)*(100/300)
++   }
++   else if(so2>380 && so2<=800){
++       si= 200+(so2-380)*(100/420)
++   }
++   else if(so2>800 && so2<=1600){
++       si= 300+(so2-800)*(100/800)
++   }
++   else if(so2>1600){
++       si= 400+(so2-1600)*(100/800)
++   }
++   return(si)
++ }
+> aq1$SOi = sapply(aq1$so2, SOi_calc)
+> #Calculating NOi
+> NOi_calc = function(no2){
++   ni=0
++   if(no2<=40){
++     ni= no2*(50/40)
++   }
++   else if(no2>40 && no2<=80){
++       ni= 50+(no2-40)*(50/40)
++   }
++   else if(no2>80 && no2<=180){
++       ni= 100+(no2-80)*(100/100)
++   }
++   else if(no2>180 && no2<=280){
++       ni= 200+(no2-180)*(100/100)
++   }
++   else if(no2>280 && no2<=400){
++       ni= 300+(no2-280)*(100/120)
++   }
++   else{
++       ni= 400+(no2-400)*(100/120)
++   }
++   return(ni)
++ }
+> aq1$NOi = sapply(aq1$no2, NOi_calc)
+> #Calculating RSPMi
+> RSPMi_calc = function(rspm){
++   rpi=0
++   if(rpi<=30){
++     rpi=rpi*50/30
++   }
++   else if(rpi>30 && rpi<=60){
++       rpi=50+(rpi-30)*50/30
++   }
++   else if(rpi>60 && rpi<=90){
++       rpi=100+(rpi-60)*100/30
++   }
++   else if(rpi>90 && rpi<=120){
++       rpi=200+(rpi-90)*100/30
++   }
++   else if(rpi>120 && rpi<=250){
++       rpi=300+(rpi-120)*(100/130)
++   }
++   else{
++       rpi=400+(rpi-250)*(100/130)
++   }
++   return(rpi)
++ }
+> aq1$RSPMi = sapply(aq1$rspm, RSPMi_calc)
+> #Calculating SPMi
+> SPMi_calc = function(spm){
++   spi=0
++   if(spm<=50){
++     spi=spm*50/50
++   }
++   else if(spm>50 && spm<=100){
++       spi=50+(spm-50)*(50/50)
++   }
++   else if(spm>100 && spm<=250){
++       spi= 100+(spm-100)*(100/150)
++   }
++   else if(spm>250 && spm<=350){
++       spi=200+(spm-250)*(100/100)
++   }
++   else if(spm>350 && spm<=430){
++       spi=300+(spm-350)*(100/80)
++   }
++   else{
++       spi=400+(spm-430)*(100/430)
++   }
++   return(spi)
++ }
+> aq1$SPMi = sapply(aq1$spm, SPMi_calc)
+> #Calculating Air Quality Index (AQI)
+> AQI_calc = function(si,ni,rspmi,spmi){
++   return(max(si,ni,rspmi,spmi))
++ }
+> aq1$AQI = mapply(AQI_calc, aq1$SOi,aq1$NOi, aq1$RSPMi, aq1$SPMi)
+> #Calculating AQI range
+> AQI_range_calc = function(x){
++   if(x<=50){
++     return("Good")
++   }
++   else if(x>50 && x<=100){
++     return("Moderate")
++   }
++   else if(x>100 && x<=200){
++     return("Poor")
++   }
++   else if(x>200 && x<=300){
++     return("Unhealthy")
++   }
++   else if(x>300 && x<=400){
++     return("Very Unhealthy")
++   }
++   else if(x>400){
++     return("Hazardous")
++   }
++ }
+> aq1$AQI_Range = sapply(aq1$AQI, AQI_range_calc)
+> #Displaying the frequency of AQI Range values
+> r = aq1 %>% count(AQI_Range)
+> r
+       AQI_Range      n
+1           Good 219319
+2      Hazardous  18700
+3       Moderate  56891
+4           Poor  93273
+5      Unhealthy  31733
+6 Very Unhealthy  15823
+> ggplot(r, aes(x=c("Good","Poor","Moderate","Unhealthy","Very Unhealthy","Hazardous"), y=n)) + geom_bar(stat = "identity") + labs(x="AQI Range",y="Frequency")
+> aq1
+            state  location agency                               type spm pm2_5       date  so2
+1  Andhra Pradesh Hyderabad   <NA> Residential, Rural and other Areas   0     0 1990-02-01  4.8
+2  Andhra Pradesh Hyderabad   <NA>                    Industrial Area   0     0 1990-02-01  3.1
+3  Andhra Pradesh Hyderabad   <NA> Residential, Rural and other Areas   0     0 1990-02-01  6.2
+4  Andhra Pradesh Hyderabad   <NA> Residential, Rural and other Areas   0     0 1990-03-01  6.3
+5  Andhra Pradesh Hyderabad   <NA>                    Industrial Area   0     0 1990-03-01  4.7
+6  Andhra Pradesh Hyderabad   <NA> Residential, Rural and other Areas   0     0 1990-03-01  6.4
+7  Andhra Pradesh Hyderabad   <NA> Residential, Rural and other Areas   0     0 1990-04-01  5.4
+8  Andhra Pradesh Hyderabad   <NA>                    Industrial Area   0     0 1990-04-01  4.7
+9  Andhra Pradesh Hyderabad   <NA> Residential, Rural and other Areas   0     0 1990-04-01  4.2
+10 Andhra Pradesh Hyderabad   <NA>                    Industrial Area   0     0 1990-05-01  4.0
+11 Andhra Pradesh Hyderabad   <NA> Residential, Rural and other Areas   0     0 1990-05-01  3.6
+12 Andhra Pradesh Hyderabad   <NA> Residential, Rural and other Areas 133     0 1990-06-01  3.9
+13 Andhra Pradesh Hyderabad   <NA>                    Industrial Area  82     0 1990-06-01  5.6
+14 Andhra Pradesh Hyderabad   <NA> Residential, Rural and other Areas 111     0 1990-06-01  3.3
+15 Andhra Pradesh Hyderabad   <NA> Residential, Rural and other Areas 118     0 1990-07-01  3.9
+16 Andhra Pradesh Hyderabad   <NA> Residential, Rural and other Areas 135     0 1990-07-01  3.5
+17 Andhra Pradesh Hyderabad   <NA>                    Industrial Area  80     0 1990-07-01  7.9
+18 Andhra Pradesh Hyderabad   <NA> Residential, Rural and other Areas 179     0 1990-08-01  4.0
+19 Andhra Pradesh Hyderabad   <NA>                    Industrial Area  58     0 1990-08-01 12.4
+20 Andhra Pradesh Hyderabad   <NA> Residential, Rural and other Areas  99     0 1990-08-01  4.0
+21 Andhra Pradesh Hyderabad   <NA> Residential, Rural and other Areas 270     0 1990-09-01  6.3
+22 Andhra Pradesh Hyderabad   <NA>                    Industrial Area  97     0 1990-09-01 44.8
+23 Andhra Pradesh Hyderabad   <NA> Residential, Rural and other Areas 167     0 1990-09-01  8.1
+24 Andhra Pradesh Hyderabad   <NA> Residential, Rural and other Areas 145     0 1990-10-01  7.7
+25 Andhra Pradesh Hyderabad   <NA>                    Industrial Area  75     0 1990-10-01 20.6
+26 Andhra Pradesh Hyderabad   <NA> Residential, Rural and other Areas 212     0 1990-10-01 20.4
+27 Andhra Pradesh Hyderabad   <NA> Residential, Rural and other Areas  93     0 1990-11-01 13.9
+28 Andhra Pradesh Hyderabad   <NA>                    Industrial Area  61     0 1990-11-01 11.2
+29 Andhra Pradesh Hyderabad   <NA> Residential, Rural and other Areas 255     0 1990-11-01 22.3
+30 Andhra Pradesh Hyderabad   <NA> Residential, Rural and other Areas 197     0 1991-01-01 24.5
+31 Andhra Pradesh Hyderabad   <NA> Residential, Rural and other Areas 148     0 1991-01-01  7.2
+32 Andhra Pradesh Hyderabad   <NA>                    Industrial Area  77     0 1991-01-01 28.7
+33 Andhra Pradesh Hyderabad   <NA> Residential, Rural and other Areas 125     0 1991-02-01 18.7
+34 Andhra Pradesh Hyderabad   <NA> Residential, Rural and other Areas 330     0 1991-02-01 24.5
+35 Andhra Pradesh Hyderabad   <NA>                    Industrial Area  93     0 1991-02-01 20.4
+36 Andhra Pradesh Hyderabad   <NA> Residential, Rural and other Areas 287     0 1991-03-01  5.2
+37 Andhra Pradesh Hyderabad   <NA> Residential, Rural and other Areas 241     0 1991-03-01  7.5
+38 Andhra Pradesh Hyderabad   <NA>                    Industrial Area  85     0 1991-03-01  4.8
+39 Andhra Pradesh Hyderabad   <NA> Residential, Rural and other Areas   0     0 1991-04-01  8.5
+40 Andhra Pradesh Hyderabad   <NA> Residential, Rural and other Areas 283     0 1991-04-01  9.7
+41 Andhra Pradesh Hyderabad   <NA>                    Industrial Area 108     0 1991-04-01 21.2
+42 Andhra Pradesh Hyderabad   <NA> Residential, Rural and other Areas 234     0 1991-05-01  4.9
+43 Andhra Pradesh Hyderabad   <NA>                    Industrial Area 121     0 1991-05-01 17.7
+44 Andhra Pradesh Hyderabad   <NA> Residential, Rural and other Areas 219     0 1991-05-01 12.3
+45 Andhra Pradesh Hyderabad   <NA> Residential, Rural and other Areas 179     0 1991-06-01  3.5
+46 Andhra Pradesh Hyderabad   <NA>                    Industrial Area  84     0 1991-06-01  3.1
+47 Andhra Pradesh Hyderabad   <NA> Residential, Rural and other Areas 154     0 1991-06-01  3.0
+48 Andhra Pradesh Hyderabad   <NA> Residential, Rural and other Areas 150     0 1991-07-01  6.2
+49 Andhra Pradesh Hyderabad   <NA>                    Industrial Area  67     0 1991-07-01  7.9
+50 Andhra Pradesh Hyderabad   <NA> Residential, Rural and other Areas 128     0 1991-07-01  6.5
+51 Andhra Pradesh Hyderabad   <NA> Residential, Rural and other Areas 119     0 1991-08-01  8.5
+52 Andhra Pradesh Hyderabad   <NA>                    Industrial Area  71     0 1991-08-01  7.8
+53 Andhra Pradesh Hyderabad   <NA> Residential, Rural and other Areas  98     0 1991-08-01  6.5
+54 Andhra Pradesh Hyderabad   <NA> Residential, Rural and other Areas 172     0 1991-09-01  6.6
+55 Andhra Pradesh Hyderabad   <NA>                    Industrial Area  56     0 1991-09-01 13.3
+    no2     rspm Day_of_yr Month    SOi    NOi RSPMi     SPMi      AQI AQI_Range
+1  17.4 78.18282       032    02  6.000 21.750     0   0.0000  21.7500      Good
+2   7.0 78.18282       032    02  3.875  8.750     0   0.0000   8.7500      Good
+3  28.5 78.18282       032    02  7.750 35.625     0   0.0000  35.6250      Good
+4  14.7 78.18282       060    03  7.875 18.375     0   0.0000  18.3750      Good
+5   7.5 78.18282       060    03  5.875  9.375     0   0.0000   9.3750      Good
+6  25.7 78.18282       060    03  8.000 32.125     0   0.0000  32.1250      Good
+7  17.1 78.18282       091    04  6.750 21.375     0   0.0000  21.3750      Good
+8   8.7 78.18282       091    04  5.875 10.875     0   0.0000  10.8750      Good
+9  23.0 78.18282       091    04  5.250 28.750     0   0.0000  28.7500      Good
+10  8.9 78.18282       121    05  5.000 11.125     0   0.0000  11.1250      Good
+11 18.6 78.18282       121    05  4.500 23.250     0   0.0000  23.2500      Good
+12 14.1 78.18282       152    06  4.875 17.625     0 122.0000 122.0000      Poor
+13 11.8 78.18282       152    06  7.000 14.750     0  82.0000  82.0000  Moderate
+14 19.3 78.18282       152    06  4.125 24.125     0 107.3333 107.3333      Poor
+15  8.2 78.18282       182    07  4.875 10.250     0 112.0000 112.0000      Poor
+16 12.1 78.18282       182    07  4.375 15.125     0 123.3333 123.3333      Poor
+17 10.2 78.18282       182    07  9.875 12.750     0  80.0000  80.0000  Moderate
+18  9.9 78.18282       213    08  5.000 12.375     0 152.6667 152.6667      Poor
+19 11.5 78.18282       213    08 15.500 14.375     0  58.0000  58.0000  Moderate
+20 12.3 78.18282       213    08  5.000 15.375     0  99.0000  99.0000  Moderate
+21 11.5 78.18282       244    09  7.875 14.375     0 220.0000 220.0000 Unhealthy
+22 13.7 78.18282       244    09 56.000 17.125     0  97.0000  97.0000  Moderate
+23 17.8 78.18282       244    09 10.125 22.250     0 144.6667 144.6667      Poor
+24 11.3 78.18282       274    10  9.625 14.125     0 130.0000 130.0000      Poor
+25 13.6 78.18282       274    10 25.750 17.000     0  75.0000  75.0000  Moderate
+26 27.5 78.18282       274    10 25.500 34.375     0 174.6667 174.6667      Poor
+27  7.2 78.18282       305    11 17.375  9.000     0  93.0000  93.0000  Moderate
+28 18.6 78.18282       305    11 14.000 23.250     0  61.0000  61.0000  Moderate
+29 35.9 78.18282       305    11 27.875 44.875     0 205.0000 205.0000 Unhealthy
+30 28.0 78.18282       001    01 30.625 35.000     0 164.6667 164.6667      Poor
+31 10.4 78.18282       001    01  9.000 13.000     0 132.0000 132.0000      Poor
+32 16.2 78.18282       001    01 35.875 20.250     0  77.0000  77.0000  Moderate
+33 42.2 78.18282       032    02 23.375 52.750     0 116.6667 116.6667      Poor
+34 18.0 78.18282       032    02 30.625 22.500     0 280.0000 280.0000 Unhealthy
+35 12.6 78.18282       032    02 25.500 15.750     0  93.0000  93.0000  Moderate
+36 41.3 78.18282       060    03  6.500 51.625     0 237.0000 237.0000 Unhealthy
+37 12.2 78.18282       060    03  9.375 15.250     0 194.0000 194.0000      Poor
+38  8.4 78.18282       060    03  6.000 10.500     0  85.0000  85.0000  Moderate
+39 48.5 78.18282       091    04 10.625 60.625     0   0.0000  60.6250  Moderate
+40 12.4 78.18282       091    04 12.125 15.500     0 233.0000 233.0000 Unhealthy
+41 11.5 78.18282       091    04 26.500 14.375     0 105.3333 105.3333      Poor
+42 15.3 78.18282       121    05  6.125 19.125     0 189.3333 189.3333      Poor
+43 14.0 78.18282       121    05 22.125 17.500     0 114.0000 114.0000      Poor
+44 38.6 78.18282       121    05 15.375 48.250     0 179.3333 179.3333      Poor
+45 11.9 78.18282       152    06  4.375 14.875     0 152.6667 152.6667      Poor
+46  7.5 78.18282       152    06  3.875  9.375     0  84.0000  84.0000  Moderate
+47 19.0 78.18282       152    06  3.750 23.750     0 136.0000 136.0000      Poor
+48 10.0 78.18282       182    07  7.750 12.500     0 133.3333 133.3333      Poor
+49  9.2 78.18282       182    07  9.875 11.500     0  67.0000  67.0000  Moderate
+50 17.3 78.18282       182    07  8.125 21.625     0 118.6667 118.6667      Poor
+51 12.5 78.18282       213    08 10.625 15.625     0 112.6667 112.6667      Poor
+52  9.8 78.18282       213    08  9.750 12.250     0  71.0000  71.0000  Moderate
+53 12.6 78.18282       213    08  8.125 15.750     0  98.0000  98.0000  Moderate
+54 12.7 78.18282       244    09  8.250 15.875     0 148.0000 148.0000      Poor
+55 11.9 78.18282       244    09 16.625 14.875     0  56.0000  56.0000  Moderate
+ [ reached 'max' / getOption("max.print") -- omitted 435684 rows ]
+> #Checking Each state's AQI Range based on mode
+> getmode <- function(v) {
++   uniqv <- unique(v)
++   uniqv[which.max(tabulate(match(v, uniqv)))]
++ }
+> statewise_AQI = aq1 %>% group_by(state)  %>% summarize(Range = getmode(AQI_Range))
+> statewise_AQI
+# A tibble: 34 x 2
+   state                Range    
+   <chr>                <chr>    
+ 1 Andhra Pradesh       Good     
+ 2 Arunachal Pradesh    Good     
+ 3 Assam                Good     
+ 4 Bihar                Poor     
+ 5 Chandigarh           Good     
+ 6 Chhattisgarh         Good     
+ 7 Dadra & Nagar Haveli Good     
+ 8 Daman & Diu          Good     
+ 9 Delhi                Hazardous
+10 Goa                  Good     
+# ... with 24 more rows
+# i Use `print(n = ...)` to see more rows
+> print(as_tibble(statewise_AQI), n=34)
+# A tibble: 34 x 2
+   state                Range    
+   <chr>                <chr>    
+ 1 Andhra Pradesh       Good     
+ 2 Arunachal Pradesh    Good     
+ 3 Assam                Good     
+ 4 Bihar                Poor     
+ 5 Chandigarh           Good     
+ 6 Chhattisgarh         Good     
+ 7 Dadra & Nagar Haveli Good     
+ 8 Daman & Diu          Good     
+ 9 Delhi                Hazardous
+10 Goa                  Good     
+11 Gujarat              Poor     
+12 Haryana              Good     
+13 Himachal Pradesh     Good     
+14 Jammu & Kashmir      Good     
+15 Jharkhand            Good     
+16 Karnataka            Good     
+17 Kerala               Good     
+18 Madhya Pradesh       Good     
+19 Maharashtra          Good     
+20 Manipur              Poor     
+21 Meghalaya            Good     
+22 Mizoram              Good     
+23 Nagaland             Good     
+24 Odisha               Good     
+25 Puducherry           Good     
+26 Punjab               Good     
+27 Rajasthan            Good     
+28 Sikkim               Moderate 
+29 Tamil Nadu           Good     
+30 Telangana            Good     
+31 Uttar Pradesh        Good     
+32 Uttarakhand          Good     
+33 Uttaranchal          Poor     
+34 West Bengal          Moderate 
+> #Finding states which have bad pollution levels
+> bad_AQI = which(statewise_AQI$Range == "Hazardous" | statewise_AQI$Range == "Poor")
+> print(statewise_AQI[bad_AQI,1])
+# A tibble: 5 x 1
+  state      
+  <chr>      
+1 Bihar      
+2 Delhi      
+3 Gujarat    
+4 Manipur    
+5 Uttaranchal
+> #Exporting as a .csv file
+> write.csv(aq1,"PreprocessedinR.csv", row.names = FALSE)
